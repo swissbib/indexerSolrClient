@@ -26,8 +26,6 @@ public class App
 
         //File file = new File("/swissbib_index/solrDocumentProcessing/MarcToSolr/data/outputfilesFrequent/20180206080049_Bulkupdate_2SearchDocs/solrout000004.xml");
         //File file = new File("/swissbib_index/solrDocumentProcessing/MarcToSolr/data/outputfilesFrequent/20180206081038_ZIdsToDelete/idsToDelete.20180206081043.xml");
-
-
         ContentStreamUpdateRequest cstrur = new ContentStreamUpdateRequest("/update");
         try {
 
@@ -37,7 +35,7 @@ public class App
                         .forEach( item -> {
 
                                 try {
-                                    cstrur.addFile(item.toFile(), "text/xml");
+                                    cstrur.addFile(item.toFile(), "application/xml");
 
                                 } catch (IOException exception) {
                                     exception.printStackTrace();
@@ -54,10 +52,8 @@ public class App
 
             System.out.println();
 
-        } catch (IOException ioException) {
-            ioException.printStackTrace();
-        } catch (SolrServerException serverException) {
-            serverException.printStackTrace();
+        } catch (IOException | SolrServerException exception) {
+            exception.printStackTrace();
         }
 
 
