@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+
+    <Properties>
+        <Property name="basePath">indexerlogs</Property>
+    </Properties>
+
+
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{YYY-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </Console>
+        <RollingFile name="fileLogger" fileName="${basePath}/client.indexer.log" filePattern="/client.indexer-%d{yyyy-MM-dd}.log">
+            <PatternLayout>
+                <pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n</pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true" />
+            </Policies>
+        </RollingFile>
+
+        <!--
+        <RollingFile name="XMLRollingfileAppender"
+                     fileName="logs/logfile.xml"
+                     filePattern="logs/logfile-%d{yyyy-MM-dd}-%i.log.gz">
+            <XMLLayout/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="17 kB"/>
+            </Policies>
+        </RollingFile>
+        -->
+
+    </Appenders>
+    <Loggers>
+        <Root level="error">
+            <AppenderRef ref="Console"/>
+        </Root>
+
+        <logger name="org.swissbib.solr.IndexerClient" level="info">
+            <AppenderRef ref="fileLogger"/>
+        </logger>
+
+
+    </Loggers>
+</Configuration>
+
