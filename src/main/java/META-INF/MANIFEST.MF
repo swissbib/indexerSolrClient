@@ -3,3 +3,4 @@ Archiver-Version: Plexus Archiver
 Built-By: project swissbib
 Created-By: Apache Maven 3.5.0
 Build-Jdk: 1.8.0_144
+Main-Class: org.swissbib.solr.IndexerClient

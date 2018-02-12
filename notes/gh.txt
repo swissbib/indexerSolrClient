@@ -1,3 +1,8 @@
+
+Aufruf der jar
+java -jar -Dlog4j.configurationFile=src/main/resources/log4j.xml -Dlog.path.clientIndexer=indexerlogs -Dapp.properties=app.properties  target/indexerSolrClient-1.0-SNAPSHOT-plugin.jar
+
+
 welche logs bei process
 2018-02-06 19:34:59.226 INFO  (qtp20671747-118659) [c:green s:shard2 r:core_node6 x:green_shard2_replica_n4] o.a.s.c.S.Request [green_shard2_replica_n4]  webapp=/solr path=/select params={q=hierarchy_parent_id:"01941224X"&hl=true&hl.simple.post={{{{END_HILITE}}}}&json.nl=arrarr&fl=*,score&hl.fragsize=250&start=0&hl.fl=fulltext&rows=1&wt=json&hl.simple.pre={{{{START_HILITE}}}}} hits=0 status=0 QTime=4
 2018-02-06 19:34:59.684 INFO  (commitScheduler-17-thread-1) [c:green s:shard2 r:core_node6 x:green_shard2_replica_n4] o.a.s.u.DirectUpdateHandler2 start commit{_version_=1591681429991849984,optimize=false,openSearcher=false,waitSearcher=true,expungeDeletes=false,softCommit=false,prepareCommit=false}

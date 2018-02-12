@@ -11,6 +11,7 @@
             <PatternLayout pattern="%d{YYY-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
         </Console>
         <RollingFile name="fileLogger" fileName="${basePath}/client.indexer.log" filePattern="/client.indexer-%d{yyyy-MM-dd}.log">
+
             <PatternLayout>
                 <pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n</pattern>
             </PatternLayout>
@@ -36,7 +37,7 @@
             <AppenderRef ref="Console"/>
         </Root>
 
-        <logger name="org.swissbib.solr.IndexerClient" level="info">
+        <logger name="org.swissbib.solr.IndexerClient" level="info" additivity="false">
             <AppenderRef ref="fileLogger"/>
         </logger>
 
