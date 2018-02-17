@@ -1,6 +1,11 @@
 
+ContentStreamUpdateRequest geht nicht
+http://lucene.472066.n3.nabble.com/SolrJ-DirectXmlRequest-td4031641.html
+
+
 Aufruf der jar
 java -jar -Dlog4j.configurationFile=src/main/resources/log4j.xml -Dlog.path.clientIndexer=indexerlogs -Dapp.properties=app.properties  target/indexerSolrClient-1.0-SNAPSHOT-plugin.jar
+java -jar -Dlog4j.configurationFile=log4j.xml -Dlog.path.clientIndexer=indexerlogs -Dapp.properties=app.properties  indexerSolrClient-1.0-SNAPSHOT-plugin.jar
 
 
 welche logs bei process

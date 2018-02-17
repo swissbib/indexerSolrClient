@@ -10,7 +10,8 @@
         <Console name="Console" target="SYSTEM_OUT">
             <PatternLayout pattern="%d{YYY-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
         </Console>
-        <RollingFile name="fileLogger" fileName="${basePath}/client.indexer.log" filePattern="/client.indexer-%d{yyyy-MM-dd}.log">
+
+        <RollingFile name="indexerClient" fileName="${basePath}/indexerClient.log" filePattern="/indexerClient-%d{yyyy-MM-dd}.log">
 
             <PatternLayout>
                 <pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n</pattern>
@@ -20,16 +21,27 @@
             </Policies>
         </RollingFile>
 
-        <!--
-        <RollingFile name="XMLRollingfileAppender"
-                     fileName="logs/logfile.xml"
-                     filePattern="logs/logfile-%d{yyyy-MM-dd}-%i.log.gz">
-            <XMLLayout/>
+        <RollingFile name="updateParser" fileName="${basePath}/updateParser.log" filePattern="/updateParser-%d{yyyy-MM-dd}.log">
+
+            <PatternLayout>
+                <pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n</pattern>
+            </PatternLayout>
             <Policies>
-                <SizeBasedTriggeringPolicy size="17 kB"/>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true" />
             </Policies>
         </RollingFile>
-        -->
+
+
+        <RollingFile name="deleteParser" fileName="${basePath}/deleteParser.log" filePattern="/deleteParser-%d{yyyy-MM-dd}.log">
+
+            <PatternLayout>
+                <pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n</pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true" />
+            </Policies>
+        </RollingFile>
+
 
     </Appenders>
     <Loggers>
@@ -38,8 +50,18 @@
         </Root>
 
         <logger name="org.swissbib.solr.IndexerClient" level="info" additivity="false">
-            <AppenderRef ref="fileLogger"/>
+            <AppenderRef ref="indexerClient"/>
         </logger>
+
+        <logger name="org.swissbib.solr.SolrXMLUpdateParser" level="debug" additivity="false">
+            <AppenderRef ref="updateParser"/>
+        </logger>
+
+
+        <logger name="org.swissbib.solr.SolrXMLDeleteParser" level="debug" additivity="false">
+            <AppenderRef ref="deleteParser"/>
+        </logger>
+
 
 
     </Loggers>
