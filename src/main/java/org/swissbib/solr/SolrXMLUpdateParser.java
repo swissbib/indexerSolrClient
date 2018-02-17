@@ -108,7 +108,8 @@ public class SolrXMLUpdateParser extends DefaultHandler {
         }
         catch (final ParserConfigurationException | SAXException | IOException e)
         {
-            updatelogger.debug("Error parsing file: " + this.file2parse.getName());
+            updatelogger.error("Error parsing file: " + this.file2parse.getName());
+            updatelogger.error(e.getStackTrace());
 
         }
     }
