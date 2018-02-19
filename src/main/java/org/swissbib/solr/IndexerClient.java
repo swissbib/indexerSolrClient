@@ -84,12 +84,17 @@ public class IndexerClient
                             } catch (IOException  | SolrServerException clientException) {
 
                                 logger.error("error parsing file: " + subDir.getAbsolutePath() +  contentFile.getName());
-                                logger.error( clientException.getStackTrace());
+                                for (StackTraceElement ste :  clientException.getStackTrace()) {
+                                    logger.error( ste);
+                                }
+
 
                             } catch (Exception throwable) {
 
                                 logger.error("error parsing file: " + subDir.getAbsolutePath() +  contentFile.getName());
-                                logger.error(throwable.getStackTrace() );
+                                for (StackTraceElement ste :  throwable.getStackTrace()) {
+                                    logger.error( ste);
+                                }
                             }
 
                         }
@@ -98,7 +103,9 @@ public class IndexerClient
                             client.commit(appProperties.getProperty("collection"));
                             logger.info("commit done");
                         } catch (SolrServerException | IOException exc) {
-                            logger.error(exc.getStackTrace());
+                            for (StackTraceElement ste :  exc.getStackTrace()) {
+                                logger.error( ste);
+                            }
                         }
 
                     }

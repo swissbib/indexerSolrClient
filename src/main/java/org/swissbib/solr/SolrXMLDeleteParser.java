@@ -100,7 +100,10 @@ public class SolrXMLDeleteParser extends DefaultHandler{
         catch (final ParserConfigurationException | SAXException | IOException e)
         {
             deletelogger.error("Error parsing file: " + this.file2parse.getName());
-            deletelogger.error(e.getStackTrace());
+
+            for (StackTraceElement ste :  e.getStackTrace()) {
+                deletelogger.error( ste);
+            }
 
         }
     }

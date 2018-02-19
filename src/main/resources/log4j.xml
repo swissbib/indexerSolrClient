@@ -11,7 +11,7 @@
             <PatternLayout pattern="%d{YYY-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
         </Console>
 
-        <RollingFile name="indexerClient" fileName="${basePath}/indexerClient.log" filePattern="/indexerClient-%d{yyyy-MM-dd}.log">
+        <RollingFile name="indexerClient" fileName="${basePath}/indexerClient.log" filePattern="indexerClient-%d{yyyy-MM-dd}.log">
 
             <PatternLayout>
                 <pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n</pattern>
@@ -21,7 +21,7 @@
             </Policies>
         </RollingFile>
 
-        <RollingFile name="updateParser" fileName="${basePath}/updateParser.log" filePattern="/updateParser-%d{yyyy-MM-dd}.log">
+        <RollingFile name="updateParser" fileName="${basePath}/updateParser.log" filePattern="updateParser-%d{yyyy-MM-dd}.log">
 
             <PatternLayout>
                 <pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n</pattern>
@@ -32,7 +32,7 @@
         </RollingFile>
 
 
-        <RollingFile name="deleteParser" fileName="${basePath}/deleteParser.log" filePattern="/deleteParser-%d{yyyy-MM-dd}.log">
+        <RollingFile name="deleteParser" fileName="${basePath}/deleteParser.log" filePattern="deleteParser-%d{yyyy-MM-dd}.log">
 
             <PatternLayout>
                 <pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n</pattern>
@@ -53,7 +53,7 @@
             <AppenderRef ref="indexerClient"/>
         </logger>
 
-        <logger name="org.swissbib.solr.SolrXMLUpdateParser" level="debug" additivity="false">
+        <logger name="org.swissbib.solr.SolrXMLUpdateParser" level="info" additivity="false">
             <AppenderRef ref="updateParser"/>
         </logger>
 

@@ -1,4 +1,8 @@
 
+letzter Stand SOLR (19.2.2018 - 12:27)
+30.157.645
+
+
 ContentStreamUpdateRequest geht nicht
 http://lucene.472066.n3.nabble.com/SolrJ-DirectXmlRequest-td4031641.html
 
