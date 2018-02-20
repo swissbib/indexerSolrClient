@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class SolrXMLUpdateParser extends DefaultHandler {
 
@@ -84,7 +85,7 @@ public class SolrXMLUpdateParser extends DefaultHandler {
     public void characters(char[] ch, int start, int length) throws SAXException {
 
         final StringBuilder buffer = new StringBuilder();
-        if (! lastFieldName.equals("") && this.currentSolrDoc != null) {
+        if (! lastFieldName.equals("") && !Objects.isNull(this.currentSolrDoc)) {
 
             for (int position = 0; position < length; position++)
                 buffer.append(ch[position + start]);

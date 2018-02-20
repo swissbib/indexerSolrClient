@@ -10,6 +10,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.Properties;
 
 import org.apache.logging.log4j.LogManager;
@@ -40,13 +41,13 @@ public class IndexerClient
 
         //todo: Refactor this based on Java 8 Streams
         File[] subDirsbasePath = new File(appProperties.getProperty("filesBasePath")).listFiles();
-        if (subDirsbasePath != null) {
+        if (! Objects.isNull(subDirsbasePath)) {
             Arrays.sort(subDirsbasePath);
             for (File subDir : subDirsbasePath) {
                 if (subDir.isDirectory()) {
                     File[] contentFiles = subDir.listFiles();
 
-                    if (contentFiles != null) {
+                    if (!Objects.isNull(contentFiles)) {
                         Arrays.sort(contentFiles);
                         for (File contentFile : contentFiles) {
 
