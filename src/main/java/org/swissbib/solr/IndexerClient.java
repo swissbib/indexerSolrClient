@@ -1,6 +1,7 @@
 package org.swissbib.solr;
 
 
+import org.antlr.runtime.RecognitionException;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
@@ -8,13 +9,20 @@ import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.lang.reflect.Array;
-import java.util.Arrays;
-import java.util.Objects;
-import java.util.Properties;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.metafacture.commons.ResourceUtil;
+import org.metafacture.flux.FluxCompiler;
+import org.metafacture.flux.parser.FluxProgramm;
+import org.metafacture.runner.util.DirectoryClassLoader;
+
+import static org.apache.logging.log4j.core.util.Loader.getClassLoader;
+import static org.metafacture.runner.Flux.PLUGINS_DIR_PROPERTY;
+import static org.metafacture.runner.Flux.PROVIDED_DIR_PROPERTY;
 
 enum ParserType {
 
@@ -28,15 +36,53 @@ public class IndexerClient
 
     private static final Logger logger = LogManager.getLogger(IndexerClient.class);
     private static Properties appProperties;
+//    private static final Pattern VAR_PATTERN = Pattern.compile("([^=]*)=(.*)");
+//    private static final String SCRIPT_HOME = "FLUX_DIR";
+
 
     public static void main( String[] args )
     {
 
         logger.info("Start indexing");
 
+/*
+        loadCustomJars();
+        final File fluxFile = new File(args[0]);
+        if (!fluxFile.exists()) {
+            System.err.println("File not found: " + args[0]);
+            System.exit(1);
+            return;
+        }
+
+        final Map<String, String> vars = new HashMap<String, String>();
+        vars.put(SCRIPT_HOME, fluxFile.getAbsoluteFile().getParent()
+                + System.getProperty("file.separator"));
+
+        for (int i = 1; i < args.length; ++i) {
+            final Matcher matcher = VAR_PATTERN.matcher(args[i]);
+            if (!matcher.find()) {
+                FluxProgramm.printHelp(System.err);
+                return;
+            }
+            vars.put(matcher.group(1), matcher.group(2));
+        }
+
+
+        try {
+            FluxCompiler.compile(ResourceUtil.getStream(fluxFile), vars).start();
+        } catch ( IOException  |RecognitionException aE) {
+            aE.printStackTrace();
+            return;
+        }
+*/
+
+
         appProperties = getApplicationProperties();
 
         final SolrClient client = getSolrClient();
+
+
+
 
 
         //todo: Refactor this based on Java 8 Streams
@@ -175,6 +221,22 @@ public class IndexerClient
 
     }
 
+/*
+    private static void loadCustomJars() {
+        final DirectoryClassLoader dirClassLoader = new DirectoryClassLoader(getClassLoader());
+
+        final String pluginsDir = System.getProperty(PLUGINS_DIR_PROPERTY);
+        if (pluginsDir != null) {
+            dirClassLoader.addDirectory(new File(pluginsDir));
+        }
+        final String providedDir = System.getProperty(PROVIDED_DIR_PROPERTY);
+        if (providedDir != null) {
+            dirClassLoader.addDirectory(new File(providedDir));
+        }
+        Thread.currentThread().setContextClassLoader(dirClassLoader);
+
+    }
+*/
 
 
 }

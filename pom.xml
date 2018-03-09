@@ -81,15 +81,92 @@
 
 
     <dependency>
+      <groupId>org.metafacture</groupId>
+      <artifactId>metafacture-runner</artifactId>
+      <version>master-SNAPSHOT</version>
+    </dependency>
+
+
+    <dependency>
+      <groupId>org.metafacture</groupId>
+      <artifactId>metafacture-framework</artifactId>
+      <version>master-SNAPSHOT</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.metafacture</groupId>
+      <artifactId>metafacture-io</artifactId>
+      <version>master-SNAPSHOT</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.metafacture</groupId>
+      <artifactId>metafacture-biblio</artifactId>
+      <version>master-SNAPSHOT</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.metafacture</groupId>
+      <artifactId>metafacture-formeta</artifactId>
+      <version>master-SNAPSHOT</version>
+    </dependency>
+
+
+    <dependency>
+      <groupId>org.metafacture</groupId>
+      <artifactId>metafacture-flux</artifactId>
+      <version>master-SNAPSHOT</version>
+    </dependency>
+
+
+    <dependency>
+      <groupId>org.metafacture</groupId>
+      <artifactId>metafacture-commons</artifactId>
+      <version>master-SNAPSHOT</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.metafacture</groupId>
+      <artifactId>metafacture-csv</artifactId>
+      <version>master-SNAPSHOT</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.metafacture</groupId>
+      <artifactId>metafacture-files</artifactId>
+      <version>master-SNAPSHOT</version>
+    </dependency>
+
+
+
+
+    <dependency>
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-core</artifactId>
       <version>2.10.0</version>
-    </dependency>    <dependency>
+    </dependency>
+    <dependency>
       <groupId>org.apache.solr</groupId>
       <artifactId>solr-solrj</artifactId>
       <version>7.2.0</version>
     </dependency>
 
+    <!--
+    <dependency>
+      <groupId>antlr</groupId>
+      <artifactId>antlr</artifactId>
+      <version>1.0.0</version>
+      <scope>system</scope>
+      <systemPath>/home/swissbib/environment/code/swissbib.repositories/indexerSolrClient/lib/antlr-3.5.2.jar</systemPath>
+    </dependency>
 
+    <dependency>
+      <groupId>antlrrun</groupId>
+      <artifactId>antlrrun</artifactId>
+      <version>1.0.0</version>
+      <scope>system</scope>
+      <systemPath>/home/swissbib/environment/code/swissbib.repositories/indexerSolrClient/lib/antlr-runtime-3.5.2.jar</systemPath>
+    </dependency>
+    -->
   </dependencies>
 </project>
