@@ -1,3 +1,11 @@
+invalid input string
+request: http://127.0.1.1:8080/solr/green_shard2_replica_n2/update?update.distrib=TOLEADER&distrib.from=http%3A%2F%2F127.0.1.1%3A8080%2Fsolr%2Fgreen_shard1_replica_n1%2F&wt=javabin&version=2
+Remote error message: ERROR: [doc=404521770] Error adding field 'freshness'='1980-01-01T00:00:' msg=Invalid Date String:'1980-01-01T00:00:'
+
+Sind das alte Daten??
+
+
+
 
 letzter Stand SOLR (19.2.2018 - 12:27)
 30.157.645

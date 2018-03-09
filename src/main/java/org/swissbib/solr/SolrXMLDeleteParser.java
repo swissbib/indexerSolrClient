@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.solr.common.SolrInputDocument;
 import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
@@ -12,6 +13,7 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
@@ -21,7 +23,7 @@ public class SolrXMLDeleteParser extends DefaultHandler{
 
     private static final Logger deletelogger = LogManager.getLogger(SolrXMLDeleteParser.class);
 
-    private File file2parse;
+    private InputStreamReader file2parse;
     private int numberParsedRecords = 0;
 
     private boolean hasDeleteTag = false;
@@ -33,7 +35,7 @@ public class SolrXMLDeleteParser extends DefaultHandler{
     private boolean debugIndexedDocs = false;
 
 
-    SolrXMLDeleteParser(File file2parse) {
+    SolrXMLDeleteParser(InputStreamReader file2parse) {
 
         this.file2parse = file2parse;
 
@@ -95,11 +97,11 @@ public class SolrXMLDeleteParser extends DefaultHandler{
         try
         {
             final SAXParser parser = factory.newSAXParser();
-            parser.parse(this.file2parse, this);
+            parser.parse(new InputSource(this.file2parse), this);
         }
         catch (final ParserConfigurationException | SAXException | IOException e)
         {
-            deletelogger.error("Error parsing file: " + this.file2parse.getName());
+            //deletelogger.error("Error parsing file: " + this.file2parse.getName());
 
             for (StackTraceElement ste :  e.getStackTrace()) {
                 deletelogger.error( ste);

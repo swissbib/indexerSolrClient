@@ -1,7 +1,6 @@
 package org.swissbib.solr;
 
 
-import org.antlr.runtime.RecognitionException;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
@@ -15,14 +14,6 @@ import java.util.regex.Pattern;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.metafacture.commons.ResourceUtil;
-import org.metafacture.flux.FluxCompiler;
-import org.metafacture.flux.parser.FluxProgramm;
-import org.metafacture.runner.util.DirectoryClassLoader;
-
-import static org.apache.logging.log4j.core.util.Loader.getClassLoader;
-import static org.metafacture.runner.Flux.PLUGINS_DIR_PROPERTY;
-import static org.metafacture.runner.Flux.PROVIDED_DIR_PROPERTY;
 
 enum ParserType {
 
@@ -97,28 +88,28 @@ public class IndexerClient
                         Arrays.sort(contentFiles);
                         for (File contentFile : contentFiles) {
 
-                            try {
+//                            try {
 
                                 ParserType pt = checkParserBasedOnFileName(contentFile.getName());
                                 switch (pt) {
 
                                     case deleteParser:
 
-                                        final SolrXMLDeleteParser deleteParser = new SolrXMLDeleteParser(contentFile);
+                                        //final SolrXMLDeleteParser deleteParser = new SolrXMLDeleteParser(contentFile);
                                         logger.info("parsing delete contentfile: " + contentFile.getName());
-                                        deleteParser.setDebugIndexedDocs(checkDebuggingDelete());
-                                        deleteParser.parseFile();
-                                        client.deleteById(appProperties.getProperty("collection"),deleteParser.getIds2Delete());
+                                        //deleteParser.setDebugIndexedDocs(checkDebuggingDelete());
+                                        //deleteParser.parseFile();
+                                        //client.deleteById(appProperties.getProperty("collection"),deleteParser.getIds2Delete());
 
                                         break;
 
                                     case updateParser:
 
-                                        final SolrXMLUpdateParser updateParser = new SolrXMLUpdateParser(contentFile);
+                                        //final SolrXMLUpdateParser updateParser = new SolrXMLUpdateParser(contentFile);
                                         logger.info("parsing update contentfile: " + contentFile.getName());
-                                        updateParser.setDebugIndexedDocs(checkDebuggingUpdate());
-                                        updateParser.parseFile();
-                                        client.add(appProperties.getProperty("collection"),updateParser.getSolrDocs());
+                                        //updateParser.setDebugIndexedDocs(checkDebuggingUpdate());
+                                        //updateParser.parseFile();
+                                        //client.add(appProperties.getProperty("collection"),updateParser.getSolrDocs());
 
                                         break;
 
@@ -128,21 +119,21 @@ public class IndexerClient
                                 }
 
 
-                            } catch (IOException  | SolrServerException clientException) {
-
-                                logger.error("error parsing file: " + subDir.getAbsolutePath() +  contentFile.getName());
-                                for (StackTraceElement ste :  clientException.getStackTrace()) {
-                                    logger.error( ste);
-                                }
-
-
-                            } catch (Exception throwable) {
-
-                                logger.error("error parsing file: " + subDir.getAbsolutePath() +  contentFile.getName());
-                                for (StackTraceElement ste :  throwable.getStackTrace()) {
-                                    logger.error( ste);
-                                }
-                            }
+//                            } catch (IOException  | SolrServerException clientException) {
+//
+//                                logger.error("error parsing file: " + subDir.getAbsolutePath() +  contentFile.getName());
+//                                for (StackTraceElement ste :  clientException.getStackTrace()) {
+//                                    logger.error( ste);
+//                                }
+//
+//
+//                            } catch (Exception throwable) {
+//
+//                                logger.error("error parsing file: " + subDir.getAbsolutePath() +  contentFile.getName());
+//                                for (StackTraceElement ste :  throwable.getStackTrace()) {
+//                                    logger.error( ste);
+//                                }
+//                            }
 
                         }
                         try {

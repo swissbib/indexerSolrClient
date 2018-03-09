@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.solr.common.SolrInputDocument;
 import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
@@ -12,6 +13,7 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
@@ -20,7 +22,7 @@ public class SolrXMLUpdateParser extends DefaultHandler {
 
     private static final Logger updatelogger = LogManager.getLogger(SolrXMLUpdateParser.class);
 
-    private File file2parse;
+    private InputStreamReader file2parse;
 
 
     private HashMap<String,ArrayList<String>> fieldsOfDoc = new HashMap<>();
@@ -38,7 +40,7 @@ public class SolrXMLUpdateParser extends DefaultHandler {
 
 
 
-    SolrXMLUpdateParser(File file2parse) {
+    SolrXMLUpdateParser(InputStreamReader file2parse) {
 
         this.file2parse = file2parse;
     }
@@ -105,11 +107,11 @@ public class SolrXMLUpdateParser extends DefaultHandler {
         try
         {
             final SAXParser parser = factory.newSAXParser();
-            parser.parse(this.file2parse, this);
+            parser.parse(new InputSource( this.file2parse), this);
         }
         catch (final ParserConfigurationException | SAXException | IOException e)
         {
-            updatelogger.error("Error parsing file: " + this.file2parse.getName());
+            //updatelogger.error("Error parsing file: " + this.file2parse.getName());
             for (StackTraceElement ste :  e.getStackTrace()) {
                 updatelogger.error( ste);
             }
