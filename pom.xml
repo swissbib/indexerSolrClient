@@ -83,58 +83,58 @@
     <dependency>
       <groupId>org.metafacture</groupId>
       <artifactId>metafacture-runner</artifactId>
-      <version>master-SNAPSHOT</version>
+      <version>5.0.0</version>
     </dependency>
 
 
     <dependency>
       <groupId>org.metafacture</groupId>
       <artifactId>metafacture-framework</artifactId>
-      <version>master-SNAPSHOT</version>
+      <version>5.0.0</version>
     </dependency>
 
     <dependency>
       <groupId>org.metafacture</groupId>
       <artifactId>metafacture-io</artifactId>
-      <version>master-SNAPSHOT</version>
+      <version>5.0.0</version>
     </dependency>
 
     <dependency>
       <groupId>org.metafacture</groupId>
       <artifactId>metafacture-biblio</artifactId>
-      <version>master-SNAPSHOT</version>
+      <version>5.0.0</version>
     </dependency>
 
     <dependency>
       <groupId>org.metafacture</groupId>
       <artifactId>metafacture-formeta</artifactId>
-      <version>master-SNAPSHOT</version>
+      <version>5.0.0</version>
     </dependency>
 
 
     <dependency>
       <groupId>org.metafacture</groupId>
       <artifactId>metafacture-flux</artifactId>
-      <version>master-SNAPSHOT</version>
+      <version>5.0.0</version>
     </dependency>
 
 
     <dependency>
       <groupId>org.metafacture</groupId>
       <artifactId>metafacture-commons</artifactId>
-      <version>master-SNAPSHOT</version>
+      <version>5.0.0</version>
     </dependency>
 
     <dependency>
       <groupId>org.metafacture</groupId>
       <artifactId>metafacture-csv</artifactId>
-      <version>master-SNAPSHOT</version>
+      <version>5.0.0</version>
     </dependency>
 
     <dependency>
       <groupId>org.metafacture</groupId>
       <artifactId>metafacture-files</artifactId>
-      <version>master-SNAPSHOT</version>
+      <version>5.0.0</version>
     </dependency>
 
 
