@@ -1,69 +1,72 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="WARN">
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
 
-    <Properties>
-        <Property name="basePath">/swissbib_index/solrDocumentProcessing/MarcToSolr/distsolr7/indexerlogs</Property>
-    </Properties>
-
-
-    <Appenders>
-        <Console name="Console" target="SYSTEM_OUT">
-            <PatternLayout pattern="%d{YYY-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
-        </Console>
-
-        <RollingFile name="indexerClient" fileName="${basePath}/indexerClient.log" filePattern="indexerClient-%d{yyyy-MM-dd}.log">
-
-            <PatternLayout>
-                <pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n</pattern>
-            </PatternLayout>
-            <Policies>
-                <TimeBasedTriggeringPolicy interval="1" modulate="true" />
-            </Policies>
-        </RollingFile>
-
-        <RollingFile name="updateParser" fileName="${basePath}/updateParser.log" filePattern="updateParser-%d{yyyy-MM-dd}.log">
-
-            <PatternLayout>
-                <pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n</pattern>
-            </PatternLayout>
-            <Policies>
-                <TimeBasedTriggeringPolicy interval="1" modulate="true" />
-            </Policies>
-        </RollingFile>
-
-
-        <RollingFile name="deleteParser" fileName="${basePath}/deleteParser.log" filePattern="deleteParser-%d{yyyy-MM-dd}.log">
-
-            <PatternLayout>
-                <pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n</pattern>
-            </PatternLayout>
-            <Policies>
-                <TimeBasedTriggeringPolicy interval="1" modulate="true" />
-            </Policies>
-        </RollingFile>
-
-
-    </Appenders>
-    <Loggers>
-        <Root level="error">
-            <AppenderRef ref="Console"/>
-        </Root>
-
-        <logger name="org.swissbib.solr.IndexerClient" level="info" additivity="false">
-            <AppenderRef ref="indexerClient"/>
-        </logger>
-
-        <logger name="org.swissbib.solr.SolrXMLUpdateParser" level="info" additivity="false">
-            <AppenderRef ref="updateParser"/>
-        </logger>
-
-
-        <logger name="org.swissbib.solr.SolrXMLDeleteParser" level="debug" additivity="false">
-            <AppenderRef ref="deleteParser"/>
-        </logger>
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
 
 
 
-    </Loggers>
-</Configuration>
 
+    <appender name="all_appender" class="org.apache.log4j.RollingFileAppender">
+        <param name="maxFileSize" value="10MB" />
+        <param name="maxBackupIndex" value="1" />
+        <param name="File" value="/swissbib_index/solrDocumentProcessing/MarcToSolr/distsolr7/indexerlogs/root.log" />
+        <param name="Threshold" value="ERROR" />
+        <layout class="org.apache.log4j.TTCCLayout">
+            <param name="DateFormat" value="ISO8601" />
+        </layout>
+    </appender>
+
+    <appender name="indexerClient" class="org.apache.log4j.RollingFileAppender">
+        <param name="maxFileSize" value="10MB" />
+        <param name="maxBackupIndex" value="1" />
+        <param name="File" value="/swissbib_index/solrDocumentProcessing/MarcToSolr/distsolr7initial/indexerlogs/indexerClient.log" />
+        <param name="Threshold" value="ERROR" />
+        <layout class="org.apache.log4j.TTCCLayout">
+            <param name="DateFormat" value="ISO8601" />
+        </layout>
+    </appender>
+
+    <appender name="updateParser" class="org.apache.log4j.RollingFileAppender">
+        <param name="maxFileSize" value="10MB" />
+        <param name="maxBackupIndex" value="1" />
+        <param name="File" value="/swissbib_index/solrDocumentProcessing/MarcToSolr/distsolr7initial/indexerlogs/updateParser.log" />
+        <param name="Threshold" value="INFO" />
+        <layout class="org.apache.log4j.TTCCLayout">
+            <param name="DateFormat" value="ISO8601" />
+        </layout>
+    </appender>
+
+
+    <appender name="deleteParser" class="org.apache.log4j.RollingFileAppender">
+        <param name="maxFileSize" value="10MB" />
+        <param name="maxBackupIndex" value="1" />
+        <param name="File" value="/swissbib_index/solrDocumentProcessing/MarcToSolr/distsolr7initial/indexerlogs/deleteParser.log" />
+        <param name="Threshold" value="INFO" />
+        <layout class="org.apache.log4j.TTCCLayout">
+            <param name="DateFormat" value="ISO8601" />
+        </layout>
+    </appender>
+
+
+
+    <logger name="org.swissbib.solr.IndexerClient"  additivity="false">
+        <level value="info"/>
+        <appender-ref ref="indexerClient"/>
+    </logger>
+
+    <logger name="org.swissbib.solr.SolrXMLUpdateParser"  additivity="false">
+        <level value="info"/>
+        <appender-ref ref="updateParser"/>
+    </logger>
+
+
+    <logger name="org.swissbib.solr.SolrXMLDeleteParser"  additivity="false">
+        <level value="debug"/>
+        <appender-ref ref="deleteParser"/>
+    </logger>
+
+    <root>
+        <priority value="ERROR"/>
+        <appender-ref ref="all_appender" />
+    </root>
+</log4j:configuration>
