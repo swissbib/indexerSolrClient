@@ -1,7 +1,12 @@
 package org.swissbib.solr;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+//import org.apache.logging.log4j.LogManager;
+//import org.apache.logging.log4j.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+
 import org.apache.solr.common.SolrInputDocument;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
@@ -20,7 +25,7 @@ import java.util.Objects;
 
 public class SolrXMLUpdateParser extends DefaultHandler {
 
-    private static final Logger updatelogger = LogManager.getLogger(SolrXMLUpdateParser.class);
+    private static final Logger updatelogger = LoggerFactory.getLogger(SolrXMLUpdateParser.class);
 
     private InputStreamReader file2parse;
 
@@ -113,7 +118,7 @@ public class SolrXMLUpdateParser extends DefaultHandler {
         {
             //updatelogger.error("Error parsing file: " + this.file2parse.getName());
             for (StackTraceElement ste :  e.getStackTrace()) {
-                updatelogger.error( ste);
+                updatelogger.error("parser error", ste);
             }
 
         }

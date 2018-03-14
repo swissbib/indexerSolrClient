@@ -12,8 +12,12 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+//import org.apache.logging.log4j.LogManager;
+//import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+
 
 enum ParserType {
 
@@ -25,7 +29,7 @@ enum ParserType {
 public class IndexerClient
 {
 
-    private static final Logger logger = LogManager.getLogger(IndexerClient.class);
+    private static final Logger logger = LoggerFactory.getLogger(IndexerClient.class);
     private static Properties appProperties;
 //    private static final Pattern VAR_PATTERN = Pattern.compile("([^=]*)=(.*)");
 //    private static final String SCRIPT_HOME = "FLUX_DIR";
@@ -142,7 +146,7 @@ public class IndexerClient
                             logger.info("commit done");
                         } catch (SolrServerException | IOException exc) {
                             for (StackTraceElement ste :  exc.getStackTrace()) {
-                                logger.error( ste);
+                                logger.error("solr server exception ", ste);
                             }
                         }
 

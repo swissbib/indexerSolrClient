@@ -1,7 +1,12 @@
 package org.swissbib.solr;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+//import org.apache.logging.log4j.LogManager;
+//import org.apache.logging.log4j.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+
 import org.apache.solr.common.SolrInputDocument;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
@@ -21,7 +26,7 @@ import java.util.ArrayList;
 public class SolrXMLDeleteParser extends DefaultHandler{
 
 
-    private static final Logger deletelogger = LogManager.getLogger(SolrXMLDeleteParser.class);
+    private static final Logger deletelogger = LoggerFactory.getLogger(SolrXMLDeleteParser.class);
 
     private InputStreamReader file2parse;
     private int numberParsedRecords = 0;
@@ -104,7 +109,7 @@ public class SolrXMLDeleteParser extends DefaultHandler{
             //deletelogger.error("Error parsing file: " + this.file2parse.getName());
 
             for (StackTraceElement ste :  e.getStackTrace()) {
-                deletelogger.error( ste);
+                deletelogger.error( "parser error", ste);
             }
 
         }
