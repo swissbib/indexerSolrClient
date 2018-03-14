@@ -144,7 +144,7 @@ public class IndexerMFClient <T> implements ConfigurableObjectWriter<T> {
                     break;
             }
 
-            if (definedNumberOfFilesForCommit != 0 && definedNumberOfFilesForCommit > processedNumberFiles) {
+            if (definedNumberOfFilesForCommit != 0 && processedNumberFiles > definedNumberOfFilesForCommit) {
                 commitServer();
                 processedNumberFiles = 0;
             }
