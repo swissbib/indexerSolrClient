@@ -192,8 +192,7 @@ public class IndexerMFClient <T> implements ConfigurableObjectWriter<T> {
             throw new MetafactureException("couldn't load mandatory property file for Solr Indexer client");
         }
 
-        definedNumberOfFilesForCommit = Integer.getInteger(configProps.getProperty("commitAfterNumberOfFiles", "0"));
-
+        definedNumberOfFilesForCommit = Integer.valueOf(configProps.getProperty("commitAfterNumberOfFiles", "0"));
         return configProps;
 
 
