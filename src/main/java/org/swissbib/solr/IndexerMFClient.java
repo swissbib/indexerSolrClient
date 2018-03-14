@@ -1,5 +1,6 @@
 package org.swissbib.solr;
 
+//import org.apache.commons.logging.LogFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,7 +33,7 @@ public class IndexerMFClient <T> implements ConfigurableObjectWriter<T> {
     private Properties appProperties;
     private SolrClient client;
 
-    //private static final Logger logger = LogManager.getLogger(IndexerClient.class);
+    private static final Logger logger = LoggerFactory.getLogger(IndexerClient.class);
 
 
     public IndexerMFClient(String pathAppProperties) {
@@ -116,7 +117,7 @@ public class IndexerMFClient <T> implements ConfigurableObjectWriter<T> {
                 case deleteParser:
 
                     final SolrXMLDeleteParser deleteParser = new SolrXMLDeleteParser(reader);
-                    //logger.info("parsing delete contentfile: " + reader.getFile().getAbsolutePath());
+                    logger.info("parsing delete contentfile: " + reader.getFile().getAbsolutePath());
                     deleteParser.setDebugIndexedDocs(checkDebuggingDelete());
                     deleteParser.parseFile();
                     client.deleteById(appProperties.getProperty("collection"),deleteParser.getIds2Delete());
@@ -126,7 +127,7 @@ public class IndexerMFClient <T> implements ConfigurableObjectWriter<T> {
                 case updateParser:
 
                     final SolrXMLUpdateParser updateParser = new SolrXMLUpdateParser(reader);
-                    //logger.info("parsing update contentfile: " + reader.getFile().getAbsolutePath());
+                    logger.info("parsing update contentfile: " + reader.getFile().getAbsolutePath());
                     updateParser.setDebugIndexedDocs(checkDebuggingUpdate());
                     updateParser.parseFile();
                     client.add(appProperties.getProperty("collection"),updateParser.getSolrDocs());
