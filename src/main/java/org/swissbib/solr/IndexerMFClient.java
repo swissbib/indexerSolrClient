@@ -33,6 +33,9 @@ public class IndexerMFClient <T> implements ConfigurableObjectWriter<T> {
     private Properties appProperties;
     private SolrClient client;
 
+    private int processedNumberFiles = 0;
+    private int definedNumberOfFilesForCommit = 0;
+
     private static final Logger logger = LoggerFactory.getLogger(IndexerClient.class);
 
 
@@ -60,6 +63,7 @@ public class IndexerMFClient <T> implements ConfigurableObjectWriter<T> {
 
         return null;
     }
+
 
     @Override
     public void setCompression(FileCompression compression) {
@@ -110,6 +114,7 @@ public class IndexerMFClient <T> implements ConfigurableObjectWriter<T> {
 
         try {
             ExtendedInputStreamReader reader = (ExtendedInputStreamReader) obj;
+            processedNumberFiles++;
 
             ParserType pt = checkParserBasedOnFileName(reader.getFile().getName());
             switch (pt) {
@@ -139,6 +144,12 @@ public class IndexerMFClient <T> implements ConfigurableObjectWriter<T> {
                     break;
             }
 
+            if (definedNumberOfFilesForCommit != 0 && definedNumberOfFilesForCommit > processedNumberFiles) {
+                commitServer();
+                processedNumberFiles = 0;
+            }
+
+
 
         } catch (IOException  | SolrServerException clientException) {
 
@@ -163,11 +174,7 @@ public class IndexerMFClient <T> implements ConfigurableObjectWriter<T> {
         //or something like commit every 'xx' file?
         //or something else?
         //analyse the automatique commit behaviour of SOLR
-        try {
-            client.commit(appProperties.getProperty("collection"));
-        } catch (SolrServerException  | IOException sE) {
-            sE.printStackTrace();
-        }
+        commitServer();
 
     }
 
@@ -185,7 +192,10 @@ public class IndexerMFClient <T> implements ConfigurableObjectWriter<T> {
             throw new MetafactureException("couldn't load mandatory property file for Solr Indexer client");
         }
 
+        definedNumberOfFilesForCommit = Integer.getInteger(configProps.getProperty("commitAfterNumberOfFiles", "0"));
+
         return configProps;
+
 
     }
 
@@ -220,6 +230,17 @@ public class IndexerMFClient <T> implements ConfigurableObjectWriter<T> {
 
         String debug  = appProperties.getProperty("debugParsingUpdate", "false");
         return Boolean.valueOf(debug);
+
+    }
+
+    private void commitServer () {
+
+        try {
+            client.commit(appProperties.getProperty("collection"));
+            logger.info("now commit against server");
+        } catch (SolrServerException  | IOException sE) {
+            logger.error("error while commiting", sE);
+        }
 
     }
 
