@@ -19,9 +19,9 @@ import javax.xml.parsers.SAXParserFactory;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Objects;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class SolrXMLUpdateParser extends DefaultHandler {
 
@@ -42,6 +42,8 @@ public class SolrXMLUpdateParser extends DefaultHandler {
     private SolrInputDocument currentSolrDoc = null;
 
     private boolean debugIndexedDocs = false;
+
+    private String id = "defaultvalue";
 
 
 
@@ -64,10 +66,6 @@ public class SolrXMLUpdateParser extends DefaultHandler {
 
             this.lastFieldName = attributes.getValue("name");
 
-            if (this.debugIndexedDocs && this.lastFieldName.equals( "id")) {
-                updatelogger.debug("parsing doc with id: " + this.lastFieldName);
-            }
-
         }
 
     }
@@ -78,6 +76,7 @@ public class SolrXMLUpdateParser extends DefaultHandler {
         if (qName.equals("doc")) {
 
             this.docStartet = false;
+
             this.solrDocs.add(this.currentSolrDoc);
             if (this.debugIndexedDocs) {
                 updatelogger.debug("created SolrInputDocument: " + this.currentSolrDoc.toString());
@@ -92,13 +91,42 @@ public class SolrXMLUpdateParser extends DefaultHandler {
     public void characters(char[] ch, int start, int length) throws SAXException {
 
         final StringBuilder buffer = new StringBuilder();
+
         if (! lastFieldName.equals("") && !Objects.isNull(this.currentSolrDoc)) {
 
             for (int position = 0; position < length; position++)
                 buffer.append(ch[position + start]);
 
+            if (this.lastFieldName.equals( "id")) {
+                this.id = buffer.toString();
+                if (this.debugIndexedDocs) {
+                    updatelogger.debug("parsing doc with id: " + buffer.toString());
+                }
+            }
 
-            this.currentSolrDoc.addField(this.lastFieldName,buffer.toString());
+            //todo: we have problems with parsing the freshness field. It happens that our sax parser is going
+            //to shorten the value - don't know why at the moment.
+            //because it's not so often but wehen it happens the complete package will be neglected by the SOLR server
+            //I implement this quick patch where I use a placeholder for the freshness field for these specific records
+            if (lastFieldName.equals("freshness") && buffer.toString().length() != 20) {
+                this.currentSolrDoc.addField(this.lastFieldName,"1999-01-01T00:00:00Z");
+                updatelogger.info("problems with the freshness field " + buffer.toString() + " in doc: " + this.id);
+
+            } else if (lastFieldName.equals("time_processed")) {
+
+                TimeZone tz = TimeZone.getTimeZone("UTC");
+                DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'"); // Quoted "Z" to indicate UTC, no timezone offset
+                df.setTimeZone(tz);
+                String nowAsISO = df.format(new Date());
+
+
+                this.currentSolrDoc.addField("time_processed",nowAsISO);
+            } else {
+                this.currentSolrDoc.addField(this.lastFieldName,buffer.toString());
+            }
+
+
+
             this.lastFieldName = "";
 
         }
