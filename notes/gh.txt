@@ -61,3 +61,71 @@ on.nl=arrarr&fl=id&fl=score&shards.purpose=4&hl.fragsize=250&start=0&fsv=true&sh
 1325 2018-02-06 19:38:46.036 INFO  (qtp20671747-119419) [c:green s:shard4 r:core_node14 x:green_shard4_replica_n12] o.a.s.c.S.Request [green_shard4_replica_n12]  webapp=/solr path=/select params={q=hierar     chy_parent_id:"471862916"&hl=true&hl.simple.post={{{{END_HILITE}}}}&json.nl=arrarr&fl=*,score&hl.fragsize=250&start=0&hl.fl=fulltext&rows=1&wt=json&hl.simple.pre={{{{START_HILITE}}}}} hits=0 status=0      QTime=2
 1326 2018-02-06 19:38:46.040 INFO  (qtp20671747-119476) [c:green s:shard2 r:core_node6 x:green_shard2_replica_n4] o.a.s.c.S.Request [green_shard2_replica_n4]  webapp=/solr path=/select params={distrib=fal     se&hl=false&json.nl=arrarr&fl=id&fl=score&shards.purpose=4&hl.fragsize=250&start=0&fsv=true&shard.url=http://131.152.230.36:8080/solr/green_shard2_replica_n4/|http://131.152.230.38:8080/solr/green_sh     ard2_replica_n7/&rows=1&version=2&hl.simple.pre={{{{START_HILITE}}}}&q=hierarchy_parent_id:"471862916"&hl.simple.post={{{{END_HILITE}}}}&NOW=1517945926039&isShard=true&hl.fl=fulltext&wt=javabin} hits     =0 status=0 QTime=0
 1327 2018-02-06 19:38:46.040 INFO  (qtp20671747-119445) [c:green s:shard2 r:core_node6 x:green_shard2_replica_n4] o.a.s.c.S.Request [green_shard2_replica_n4]  webapp=/solr path=/select params={q=hierarchy     _parent_id:"471862916"&hl=true&hl.simple.post={{{{END_HILITE}}}}&json.nl=arrarr&fl=*,score&hl.fragsize=250&start=0&hl.fl=fulltext&rows=1&wt=json&hl.simple.pre={{{{START_HILITE}}}}} hits=0 status=0 QT     ime=1
+
+
+
+***** Problem parsing des timestamp - 13.5.2018 *****
+org.apache.solr.client.solrj.impl.HttpSolrClient$RemoteSolrException: Error from server at http://localhost:8080/solr: ERROR: [doc=508232937] Error adding field 'freshness'='2013-01-01T00:00:' msg=Invalid Date String:'2013-01-01T00:00:'
+	at org.apache.solr.client.solrj.impl.HttpSolrClient.executeMethod(HttpSolrClient.java:643)
+	at org.apache.solr.client.solrj.impl.HttpSolrClient.request(HttpSolrClient.java:255)
+	at org.apache.solr.client.solrj.impl.HttpSolrClient.request(HttpSolrClient.java:244)
+	at org.apache.solr.client.solrj.SolrRequest.process(SolrRequest.java:194)
+	at org.apache.solr.client.solrj.SolrClient.add(SolrClient.java:106)
+	at org.apache.solr.client.solrj.SolrClient.add(SolrClient.java:71)
+	at org.swissbib.solr.IndexerMFClient.process(IndexerMFClient.java:138)
+	at org.swissbib.solr.ExtendedFileOpener.process(ExtendedFileOpener.java:76)
+	at org.swissbib.solr.ExtendedFileOpener.process(ExtendedFileOpener.java:22)
+	at org.metafacture.files.DirReader.dir(DirReader.java:79)
+	at org.metafacture.files.DirReader.dir(DirReader.java:76)
+	at org.metafacture.files.DirReader.process(DirReader.java:57)
+	at org.metafacture.files.DirReader.process(DirReader.java:35)
+	at org.metafacture.flux.parser.StringSender.process(StringSender.java:38)
+	at org.metafacture.flux.parser.Flow.start(Flow.java:110)
+	at org.metafacture.flux.parser.FluxProgramm.start(FluxProgramm.java:156)
+	at org.metafacture.runner.Flux.main(Flux.java:79)
+org.apache.solr.client.solrj.impl.HttpSolrClient$RemoteSolrException: Error from server at http://localhost:8080/solr: ERROR: [doc=508293359] Error adding field 'freshness'='2011-01-01T00:00:00' msg=Invalid Date String:'2011-01-01T00:00:00'
+	at org.apache.solr.client.solrj.impl.HttpSolrClient.executeMethod(HttpSolrClient.java:643)
+	at org.apache.solr.client.solrj.impl.HttpSolrClient.request(HttpSolrClient.java:255)
+	at org.apache.solr.client.solrj.impl.HttpSolrClient.request(HttpSolrClient.java:244)
+	at org.apache.solr.client.solrj.SolrRequest.process(SolrRequest.java:194)
+	at org.apache.solr.client.solrj.SolrClient.add(SolrClient.java:106)
+	at org.apache.solr.client.solrj.SolrClient.add(SolrClient.java:71)
+	at org.swissbib.solr.IndexerMFClient.process(IndexerMFClient.java:138)
+	at org.swissbib.solr.ExtendedFileOpener.process(ExtendedFileOpener.java:76)
+	at org.swissbib.solr.ExtendedFileOpener.process(ExtendedFileOpener.java:22)
+	at org.metafacture.files.DirReader.dir(DirReader.java:79)
+	at org.metafacture.files.DirReader.dir(DirReader.java:76)
+	at org.metafacture.files.DirReader.process(DirReader.java:57)
+	at org.metafacture.files.DirReader.process(DirReader.java:35)
+	at org.metafacture.flux.parser.StringSender.process(StringSender.java:38)
+	at org.metafacture.flux.parser.Flow.start(Flow.java:110)
+	at org.metafacture.flux.parser.FluxProgramm.start(FluxProgramm.java:156)
+	at org.metafacture.runner.Flux.main(Flux.java:79)
+org.apache.solr.client.solrj.impl.HttpSolrClient$RemoteSolrException: Error from server at http://localhost:8080/solr: Async exception during distributed update: Error from server at http://127.0.1.1:8080/solr/green_shard2_replica_n2: Bad Request
+
+
+
+request: http://127.0.1.1:8080/solr/green_shard2_replica_n2/update?update.distrib=TOLEADER&distrib.from=http%3A%2F%2F127.0.1.1%3A8080%2Fsolr%2Fgreen_shard1_replica_n1%2F&wt=javabin&version=2
+Remote error message: ERROR: [doc=50836146X] Error adding field 'time_processed'='2018-03-' msg=Invalid Date String:'2018-03-'
+	at org.apache.solr.client.solrj.impl.HttpSolrClient.executeMethod(HttpSolrClient.java:643)
+	at org.apache.solr.client.solrj.impl.HttpSolrClient.request(HttpSolrClient.java:255)
+	at org.apache.solr.client.solrj.impl.HttpSolrClient.request(HttpSolrClient.java:244)
+	at org.apache.solr.client.solrj.SolrRequest.process(SolrRequest.java:194)
+	at org.apache.solr.client.solrj.SolrClient.add(SolrClient.java:106)
+	at org.apache.solr.client.solrj.SolrClient.add(SolrClient.java:71)
+	at org.swissbib.solr.IndexerMFClient.process(IndexerMFClient.java:138)
+	at org.swissbib.solr.ExtendedFileOpener.process(ExtendedFileOpener.java:76)
+	at org.swissbib.solr.ExtendedFileOpener.process(ExtendedFileOpener.java:22)
+	at org.metafacture.files.DirReader.dir(DirReader.java:79)
+	at org.metafacture.files.DirReader.dir(DirReader.java:76)
+	at org.metafacture.files.DirReader.process(DirReader.java:57)
+	at org.metafacture.files.DirReader.process(DirReader.java:35)
+	at org.metafacture.flux.parser.StringSender.process(StringSender.java:38)
+	at org.metafacture.flux.parser.Flow.start(Flow.java:110)
+	at org.metafacture.flux.parser.FluxProgramm.start(FluxProgramm.java:156)
+	at org.metafacture.runner.Flux.main(Flux.java:79)
+
+
+Testdaten:
+/swissbib_index/solrDocumentProcessing/MarcToSolr/data/outputfiles/job2r7A155
+so wie es aussieht, werden dann alle Daten des package nicht indexiert!
