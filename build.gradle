@@ -1,0 +1,64 @@
+apply plugin: 'java-library'
+apply plugin: 'maven'
+
+apply plugin: 'com.github.johnrengelman.shadow'
+
+
+
+group = 'org.swissbib.solr'
+version = '1.0-SNAPSHOT'
+
+description = """indexerSolrClient"""
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+tasks.withType(JavaCompile) {
+	options.encoding = 'UTF-8'
+}
+
+buildscript {
+    repositories {
+        jcenter()
+        mavenLocal()
+    }
+    dependencies {
+        //http://imperceptiblethoughts.com/shadow/
+        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.4'
+    }
+}
+
+
+repositories {
+
+    maven { url "http://repo.maven.apache.org/maven2" }
+    //ich benoetige jcenter damit die dependency auf diese Komponente aufgelöst werden kann
+    //http://repo.maven.apache.org/maven2/org/restlet/jee/org.restlet/2.3.0/org.restlet-2.3.0.pom
+    //http://repo.maven.apache.org/maven2/org/restlet/jee/org.restlet.ext.servlet/2.3.0/org.restlet.ext.servlet-2.3.0.pom
+    //Required by:
+    //project : > org.apache.solr:solr-analysis-extras:7.3.0
+    //todo: was ist der Unterschied zwischen jcenter und maven
+    // kann es sein, dass das servlet auf https://mvnrepository.com/artifact/org.restlet.jee abrufbar ist?
+    //möglicherweise maven repository oben ohne Adresse angeben
+    //ich habe immer noch das Problem, dass ich die saxon Komponente lokal bereitstellen muss, Finde ich hier noch einen besseren
+    //Weg - provates remote respotory? - für Externe besser dokumentieren
+    jcenter()
+}
+
+
+
+
+
+dependencies {
+    implementation group: 'org.metafacture', name: 'metafacture-runner', version:'5.0.0'
+    implementation group: 'org.metafacture', name: 'metafacture-framework', version:'5.0.0'
+    implementation group: 'org.metafacture', name: 'metafacture-io', version:'5.0.0'
+    implementation group: 'org.metafacture', name: 'metafacture-biblio', version:'5.0.0'
+    implementation group: 'org.metafacture', name: 'metafacture-formeta', version:'5.0.0'
+    implementation group: 'org.metafacture', name: 'metafacture-flux', version:'5.0.0'
+    implementation group: 'org.metafacture', name: 'metafacture-commons', version:'5.0.0'
+    implementation group: 'org.metafacture', name: 'metafacture-csv', version:'5.0.0'
+    implementation group: 'org.metafacture', name: 'metafacture-files', version:'5.0.0'
+    implementation group: 'org.slf4j', name: 'slf4j-log4j12', version:'1.7.21'
+    implementation group: 'org.apache.solr', name: 'solr-solrj', version:'7.3.1'
+    testImplementation group: 'junit', name: 'junit', version:'4.12'
+}
