@@ -9,6 +9,8 @@ import org.metafacture.framework.annotations.In;
 import org.metafacture.framework.annotations.Out;
 import org.metafacture.framework.helpers.DefaultObjectPipe;
 import org.metafacture.io.FileCompression;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 
@@ -29,6 +31,9 @@ public class ExtendedFileOpener
 
     private String encoding = "UTF-8";
     private FileCompression compression = FileCompression.AUTO;
+
+    private static final Logger logger = LoggerFactory.getLogger(ExtendedFileOpener.class);
+
 
     /**
      * Returns the encoding used to open the resource.
@@ -72,7 +77,7 @@ public class ExtendedFileOpener
                     ExtendedInputStreamReader eiR = new ExtendedInputStreamReader(new BOMInputStream(
                             decompressor), encoding);
                     eiR.setFile(new File(file));
-
+                    logger.debug("File opened: " + file);
                     getReceiver().process(eiR);
                 } catch (final IOException | MetafactureException e) {
                     decompressor.close();

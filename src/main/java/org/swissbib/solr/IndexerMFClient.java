@@ -1,6 +1,7 @@
 package org.swissbib.solr;
 
 //import org.apache.commons.logging.LogFactory;
+import org.apache.solr.client.solrj.impl.CloudSolrClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,7 +19,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.Properties;
+import java.util.*;
 
 
 @Description("Indexes a customized InputStream to Solr ")
@@ -31,7 +32,7 @@ public class IndexerMFClient <T> implements ConfigurableObjectWriter<T> {
 
     //todo: should this be static?
     private Properties appProperties;
-    private SolrClient client;
+    private ArrayList<SolrClientWrapper> solrServerClientList;
 
     private int processedNumberFiles = 0;
     private int definedNumberOfFilesForCommit = 0;
@@ -42,7 +43,7 @@ public class IndexerMFClient <T> implements ConfigurableObjectWriter<T> {
     public IndexerMFClient(String pathAppProperties) {
 
         appProperties = getApplicationProperties(pathAppProperties);
-        client = getSolrClient();
+        solrServerClientList = getSolrClients();
 
 
     }
@@ -125,7 +126,18 @@ public class IndexerMFClient <T> implements ConfigurableObjectWriter<T> {
                     logger.info("parsing delete contentfile: " + reader.getFile().getAbsolutePath());
                     deleteParser.setDebugIndexedDocs(checkDebuggingDelete());
                     deleteParser.parseFile();
-                    client.deleteById(appProperties.getProperty("collection"),deleteParser.getIds2Delete());
+                        //todo: besseres verständnis von Lambdas im Zusammenspiel mit Exceptions
+                        solrServerClientList.forEach((SolrClientWrapper client) -> {
+                            //try {
+                                client.deleteById(deleteParser.getIds2Delete());
+                                //client.deleteById(
+                                //        appProperties.getProperty("collection"), deleteParser.getIds2Delete());
+                            //} catch (SolrServerException | IOException e) {
+                            //    logger.error("Error in Solr client method deleteByid",e);
+                            //}
+                        });
+
+                    //client.deleteById(appProperties.getProperty("collection"),deleteParser.getIds2Delete());
 
                     break;
 
@@ -135,10 +147,21 @@ public class IndexerMFClient <T> implements ConfigurableObjectWriter<T> {
                     logger.info("parsing update contentfile: " + reader.getFile().getAbsolutePath());
                     updateParser.setDebugIndexedDocs(checkDebuggingUpdate());
                     updateParser.parseFile();
-                    client.add(appProperties.getProperty("collection"),updateParser.getSolrDocs());
+                    //client.add(appProperties.getProperty("collection"),updateParser.getSolrDocs());
+                    solrServerClientList.forEach((SolrClientWrapper client) -> {
+                        client.add(updateParser.getSolrDocs());
+                        //try {
+                            //client.add(
+                            //        appProperties.getProperty("collection"), updateParser.getSolrDocs());
+                        //} catch (SolrServerException | IOException e) {
+                        //    logger.error("Error in Solr client method add",e);
+                        //}
+                    });
 
                     break;
 
+                case notDefined:
+                    break;
                 default:
 
                     break;
@@ -151,9 +174,6 @@ public class IndexerMFClient <T> implements ConfigurableObjectWriter<T> {
 
 
 
-        } catch (IOException  | SolrServerException clientException) {
-
-            clientException.printStackTrace();
 
         } catch (Exception throwable) {
 
@@ -175,6 +195,7 @@ public class IndexerMFClient <T> implements ConfigurableObjectWriter<T> {
         //or something else?
         //analyse the automatique commit behaviour of SOLR
         commitServer();
+        this.solrServerClientList.forEach(SolrClientWrapper::close);
 
     }
 
@@ -198,14 +219,70 @@ public class IndexerMFClient <T> implements ConfigurableObjectWriter<T> {
 
     }
 
-    private SolrClient getSolrClient() {
+    private ArrayList<SolrClientWrapper> getSolrClients() {
 
-        final String solrUrl = appProperties.getProperty("solrURL");
-        return new HttpSolrClient.Builder(solrUrl)
-                .withConnectionTimeout(200000)
-                .withSocketTimeout(600000)
-                .build();
+        final String solrUrlProp = appProperties.getProperty("solrURL");
+        final String zkHostProps = appProperties.getProperty("zkHost","");
+        final String zkChRootProps = appProperties.getProperty("zkChRoot","");
+        final int connectionTimeout = Integer.valueOf(appProperties.getProperty("connectionTimeout","200000"));
+        final int socketTimeout = Integer.valueOf( appProperties.getProperty("socketTimeout", "600000"));
 
+        final String[] collections = appProperties.getProperty("collection").split("##");
+
+
+        final ArrayList<SolrClientWrapper> clientList = new ArrayList<>();
+
+        //in case we don not configure any zkHosts we assume indexing should be done via a single data node
+        if (zkHostProps.equalsIgnoreCase("")) {
+            String[] solrUrls = solrUrlProp.split("##");
+
+            int i = 0;
+            for (String solrURL : solrUrls) {
+
+
+                clientList.add(new SolrClientWrapper(solrURL,
+                        collections[i],
+                        connectionTimeout,
+                        socketTimeout));
+
+                i++;
+            }
+            //clientList.add(new HttpSolrClient.Builder(solrUrl)
+            //        .withConnectionTimeout(connectionTimeout)
+            //        .withSocketTimeout(socketTimeout)
+            //        .build());
+
+
+        }
+        else {
+
+            String[] zkEnsembles  = zkHostProps.split("##");
+            String[] zkCHRoots = zkChRootProps.split("##");
+
+            int i = 0;
+            for (String zkEnsemble : zkEnsembles) {
+                //String[] zkHosts = zkEnsemble.split(",");
+                //Optional<String> zkCHRoot =  Optional.of(zkCHRoots[i]);
+
+                //clientList.add( new CloudSolrClient.Builder(Arrays.asList(zkHosts),zkCHRoot).
+                //        withConnectionTimeout(connectionTimeout).
+                //        withSocketTimeout(socketTimeout).
+                //        build());
+
+                clientList.add(new SolrClientWrapper(zkEnsemble.split(","),
+                        zkCHRoots[i],
+                        collections[i],
+                        connectionTimeout,
+                        socketTimeout
+                        ));
+
+                i++;
+            }
+
+        }
+
+
+        return clientList;
     }
 
     private ParserType checkParserBasedOnFileName(String fileName) {
@@ -234,15 +311,12 @@ public class IndexerMFClient <T> implements ConfigurableObjectWriter<T> {
 
     private void commitServer () {
 
-        try {
-            client.commit(appProperties.getProperty("collection"));
+        for (SolrClientWrapper client : solrServerClientList) {
             logger.info("now commit against server");
-        } catch (SolrServerException  | IOException sE) {
-            logger.error("error while commiting", sE);
+            client.commit();
+
         }
 
     }
-
-
 
 }
