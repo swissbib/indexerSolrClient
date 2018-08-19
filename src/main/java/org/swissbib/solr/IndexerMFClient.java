@@ -15,11 +15,13 @@ import org.metafacture.framework.annotations.Out;
 import org.metafacture.io.ConfigurableObjectWriter;
 import org.metafacture.io.FileCompression;
 
+import javax.swing.text.html.parser.Parser;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.*;
+import java.util.regex.Pattern;
 
 
 @Description("Indexes a customized InputStream to Solr ")
@@ -39,11 +41,14 @@ public class IndexerMFClient <T> implements ConfigurableObjectWriter<T> {
 
     private static final Logger logger = LoggerFactory.getLogger(IndexerClient.class);
 
+    private final ArrayList<Pattern> deleteFilePattern;
+
 
     public IndexerMFClient(String pathAppProperties) {
 
         appProperties = getApplicationProperties(pathAppProperties);
         solrServerClientList = getSolrClients();
+        deleteFilePattern = getDeleteFilePattern();
 
 
     }
@@ -222,10 +227,10 @@ public class IndexerMFClient <T> implements ConfigurableObjectWriter<T> {
     private ArrayList<SolrClientWrapper> getSolrClients() {
 
         final String solrUrlProp = appProperties.getProperty("solrURL");
-        final String zkHostProps = appProperties.getProperty("zkHost","");
-        final String zkChRootProps = appProperties.getProperty("zkChRoot","");
-        final int connectionTimeout = Integer.valueOf(appProperties.getProperty("connectionTimeout","200000"));
-        final int socketTimeout = Integer.valueOf( appProperties.getProperty("socketTimeout", "600000"));
+        final String zkHostProps = appProperties.getProperty("zkHost", "");
+        final String zkChRootProps = appProperties.getProperty("zkChRoot", "");
+        final int connectionTimeout = Integer.valueOf(appProperties.getProperty("connectionTimeout", "200000"));
+        final int socketTimeout = Integer.valueOf(appProperties.getProperty("socketTimeout", "600000"));
 
         final String[] collections = appProperties.getProperty("collection").split("##");
 
@@ -253,10 +258,9 @@ public class IndexerMFClient <T> implements ConfigurableObjectWriter<T> {
             //        .build());
 
 
-        }
-        else {
+        } else {
 
-            String[] zkEnsembles  = zkHostProps.split("##");
+            String[] zkEnsembles = zkHostProps.split("##");
             String[] zkCHRoots = zkChRootProps.split("##");
 
             int i = 0;
@@ -274,7 +278,7 @@ public class IndexerMFClient <T> implements ConfigurableObjectWriter<T> {
                         collections[i],
                         connectionTimeout,
                         socketTimeout
-                        ));
+                ));
 
                 i++;
             }
@@ -285,14 +289,32 @@ public class IndexerMFClient <T> implements ConfigurableObjectWriter<T> {
         return clientList;
     }
 
+    private ArrayList<Pattern> getDeleteFilePattern() {
+
+        //ArrayList<String> al = new ArrayList<>(Arrays.asList(appProperties.getProperty("patternDeleteFiles","").split("##")));
+        ArrayList<Pattern> pl = new ArrayList<>();
+        //return new ArrayList<>(Arrays.asList(appProperties.getProperty("patternDeleteFiles","").split("##")));
+        Arrays.asList(appProperties.getProperty("patternDeleteFiles","").split("##")).
+                forEach(s -> pl.add(Pattern.compile(s,Pattern.CASE_INSENSITIVE|Pattern.DOTALL)));
+        return pl;
+
+
+    }
+
     private ParserType checkParserBasedOnFileName(String fileName) {
 
-        //todo: very simple check - use configuration for better differentiation
-        if (fileName.contains("idsToDelete"))
-            return ParserType.deleteParser;
-        else
-            return ParserType.updateParser;
+        ParserType pt = ParserType.updateParser;
+        for (Pattern pattern: deleteFilePattern) {
+            if (pattern.matcher(fileName).matches())
+                pt = ParserType.deleteParser;
+        }
 
+        //if (fileName.contains("idsToDelete"))
+        //    return ParserType.deleteParser;
+        //else
+        //    return ParserType.updateParser;
+
+        return pt;
     }
 
     private boolean checkDebuggingDelete() {
