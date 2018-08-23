@@ -148,7 +148,10 @@ public class IndexerMFClient <T> implements ConfigurableObjectWriter<T> {
 
                 case updateParser:
 
-                    final SolrXMLUpdateParser updateParser = new SolrXMLUpdateParser(reader);
+                    //final SolrXMLUpdateParser updateParser = new SolrXMLUpdateParser(reader);
+
+                    final SolrStaxXMLUpdateParser updateParser = new SolrStaxXMLUpdateParser(reader);
+
                     logger.info("parsing update contentfile: " + reader.getFile().getAbsolutePath());
                     updateParser.setDebugIndexedDocs(checkDebuggingUpdate());
                     updateParser.parseFile();
