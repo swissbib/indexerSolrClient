@@ -1,4 +1,6 @@
 
+//this is the default value for initial indexing;
+//you should always overwrite it when starting the flux-script with a key/value pair for dir2read
 default dir2read = "/swissbib_index/solrDocumentProcessing/MarcToSolr/data/outputfiles";
 default appPropPath = FLUX_DIR + "../app.properties";
 
